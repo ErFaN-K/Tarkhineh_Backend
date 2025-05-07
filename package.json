@@ -19,7 +19,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node src/app.ts"
+    "start": "nodemon --exec ts-node src/app.ts",
+    "format": "npx prettier --write ."
   },
   "keywords": [],
   "author": "",
