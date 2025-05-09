@@ -1,29 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES2024",
-    "moduleResolution": "node",
-    "allowJs": true,
+    "target": "ES2020",
+    "module": "commonjs",
     "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipDefaultLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "esModuleInterop": true,
     "outDir": "./dist",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "strictNullChecks": true
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "baseUrl": "./",
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*.ts"]
 }

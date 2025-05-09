@@ -1,0 +1,1 @@
+{"root":["./src/app.ts","./src/server.ts","./src/config/database.config.ts","./src/controllers/test.ts","./src/middlewares/test.ts","./src/models/test.ts","./src/routes/test.ts","./src/services/test.ts","./src/types/test.ts","./src/utils/ checkDbConnection.ts"],"errors":true,"version":"5.8.3"}
