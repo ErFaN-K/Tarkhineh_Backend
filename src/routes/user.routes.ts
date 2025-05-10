@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { createUserHandler } from '@/controllers/user.controller';
+import { createUserHandler, deleteUserHandler } from '@/controllers/user.controller';
 
 // Config Router For User
 const router = Router();
 
 // Create User Route
 router.post('/', createUserHandler);
+router.delete('/', deleteUserHandler)
 
 export default router;
