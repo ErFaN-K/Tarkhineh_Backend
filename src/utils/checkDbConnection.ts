@@ -3,7 +3,7 @@ import db from '@/config/database.config';
 export const checkDbConnection = async (): Promise<void> => {
   try {
     await db.authenticate();
-    await db.sync({ alter: true });
+    await db.sync({ force: true });
 
     console.log('Database Connected Successfully');
   } catch (error: unknown) {

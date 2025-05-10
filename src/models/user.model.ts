@@ -5,10 +5,12 @@ import {
   DataType,
   BeforeCreate,
   BeforeUpdate,
+  AllowNull,
 } from 'sequelize-typescript';
 
 @Table({
   tableName: 'users',
+  timestamps: true,
 })
 export default class User extends Model {
   @Column({
@@ -25,10 +27,10 @@ export default class User extends Model {
 
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true,
   })
-  email!: string;
+  email?: string | null;
 
   @Column({
     type: DataType.STRING,
@@ -41,19 +43,34 @@ export default class User extends Model {
     type: DataType.STRING,
     allowNull: true,
   })
-  displayName?: string;
+  displayName?: string | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  birthDate?: Date;
+  birthDate?: Date | null;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true,
+  })
+  userProfile?: string | null;
+
+  @Column({
+    type: DataType.ENUM('admin', 'user'),
+    allowNull: false,
+    defaultValue: 'user',
+  })
+  userRole!: string;
 
   @BeforeCreate
   @BeforeUpdate
   static setDisplayName(user: User) {
-    if (!user.displayName) {
+    if (user.firstName && user.lastName) {
       user.displayName = `${user.firstName} ${user.lastName}`;
+    } else {
+      user.displayName = null;
     }
   }
 }

@@ -1,5 +1,6 @@
 import express from 'express';
 import { checkDbConnection } from './utils/checkDbConnection';
+import userRoute from '@/routes/user.routes';
 
 const app = express();
 
@@ -15,5 +16,10 @@ const initializeApp = async (): Promise<void> => {
 };
 
 initializeApp();
+
+// Config Router
+
+// User Routes
+app.use('/api/user', userRoute);
 
 export default app;
