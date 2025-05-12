@@ -4,8 +4,6 @@ import {
   Model,
   DataType,
   BeforeCreate,
-  BeforeUpdate,
-  AllowNull,
 } from 'sequelize-typescript';
 
 @Table({
@@ -62,7 +60,14 @@ export default class User extends Model {
     allowNull: false,
     defaultValue: 'user',
   })
-  userRole!: string;
+  userRole!: 'admin' | 'user';
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  isBanned!: boolean;
 
   @BeforeCreate
   static setDisplayName(user: User) {

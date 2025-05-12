@@ -1,10 +1,10 @@
-import { UpdateUserDTO } from '@/dto/UserDTO';
+import { CreateUserDTO } from '@/dto/user.dto';
 import { Request, Response, NextFunction } from 'express';
 import { ObjectSchema } from 'joi';
 
-export const updateUserValidate = (schema: ObjectSchema) => {
+export const createUserValidate = (schema: ObjectSchema) => {
   return (
-    req: Request<{}, {}, UpdateUserDTO>,
+    req: Request<{}, {}, CreateUserDTO>,
     res: Response,
     next: NextFunction
   ): void => {

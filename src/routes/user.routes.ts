@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import {
   createUserHandler,
-  deleteUserHandler,
+  banUserHandler,
   getUsersHandler,
   getUserHandler,
   updateUserHandler,
 } from '@/controllers/user.controller';
 
 import { createUserSchema, updateUserSchema } from '@/schemas/user.schema';
-import { createUserValidate } from '@/middlewares/createUserValidation.middleware';
-import { updateUserValidate } from '@/middlewares/updateUserValidation.middleware';
+import { createUserValidate } from '@/middlewares/validations/createUserValidation.middleware';
+import { updateUserValidate } from '@/middlewares/validations/updateUserValidation.middleware';
 
 import profileUpload from '@/config/profileUpload.config';
 
@@ -28,7 +28,7 @@ router.patch(
 );
 
 // Delete User Route
-router.delete('/:phoneNumber', deleteUserHandler);
+router.delete('/:phoneNumber', banUserHandler);
 
 // Get Users
 router.get('/', getUsersHandler);
