@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateUserDTO, UpdateUserDTO } from '@/dto/UserDTO';
+import { CreateUserDTO, UpdateUserDTO } from '@/dto/user.dto';
 import {
   createUser,
   deleteUser,

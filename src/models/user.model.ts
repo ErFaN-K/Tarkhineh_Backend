@@ -3,9 +3,7 @@ import {
   Column,
   Model,
   DataType,
-  BeforeCreate,
-  BeforeUpdate,
-  AllowNull,
+  BeforeCreate
 } from 'sequelize-typescript';
 
 @Table({
@@ -62,7 +60,7 @@ export default class User extends Model {
     allowNull: false,
     defaultValue: 'user',
   })
-  userRole!: string;
+  userRole!: 'admin' | 'user';
 
   @BeforeCreate
   static setDisplayName(user: User) {

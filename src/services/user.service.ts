@@ -1,6 +1,6 @@
 import User from '@/models/user.model';
 import ResponseHandler from '@/types/ResponseHandler';
-import { CreateUserDTO, UpdateUserDTO } from '@/dto/UserDTO';
+import { CreateUserDTO, UpdateUserDTO } from '@/dto/user.dto';
 import handleError from '@/utils/serviceHandleError';
 
 export const createUser = async (
