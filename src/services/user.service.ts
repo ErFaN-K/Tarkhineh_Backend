@@ -2,16 +2,28 @@ import User from '@/models/user.model';
 import ResponseHandler from '@/types/ResponseHandler';
 import { CreateUserDTO, UpdateUserDTO } from '@/dto/user.dto';
 import handleError from '@/utils/serviceHandleError';
+import { mapUser, mapUsers } from '@/utils/mapUserResponse';
 
 export const createUser = async (
   userData: CreateUserDTO
 ): Promise<ResponseHandler> => {
   try {
-    const userExists = await User.findOne({ where: { phoneNumber: userData.phoneNumber } }) 
-    if(userExists) return {
-      success: true,
-      statusCode: 400,
-      message: `User With phone number: ${userData.phoneNumber} is exists.`,
+    const userExists = await User.findOne({
+      where: { phoneNumber: userData.phoneNumber },
+    });
+    if (userExists) {
+      if (userExists.isBanned) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `User with phone number: ${userData.phoneNumber} already banned.`,
+        };
+      }
+      return {
+        success: false,
+        statusCode: 400,
+        message: `User with phone number: ${userData.phoneNumber} already exists.`,
+      };
     }
     const user = await User.create({
       phoneNumber: userData.phoneNumber,
@@ -19,10 +31,12 @@ export const createUser = async (
       lastName: userData.lastName,
     });
 
+    const userDataResponse = mapUser(user);
+
     return {
       success: true,
       statusCode: 201,
-      data: user,
+      data: userDataResponse,
       message: 'User created successfully.',
     };
   } catch (error: unknown) {
@@ -30,34 +44,33 @@ export const createUser = async (
   }
 };
 
-export const deleteUser = async (
+export const banUser = async (
   phoneNumber: string
 ): Promise<ResponseHandler> => {
   try {
     const userExists = await User.findOne({ where: { phoneNumber } });
 
-    if (!userExists) {
+    if (!userExists)
       return {
         success: false,
         statusCode: 404,
         message: `User with phone number ${phoneNumber} not found.`,
       };
-    }
 
-    const isDeleted = await User.destroy({ where: { phoneNumber } });
-
-    if (isDeleted > 0) {
+    if (userExists.isBanned)
       return {
-        success: true,
-        statusCode: 200,
-        message: `User with phone number ${phoneNumber} deleted successfully.`,
+        success: false,
+        statusCode: 400,
+        message: `User with phone number: ${userExists.phoneNumber} already banned.`,
       };
-    }
 
+    await userExists.update({
+      isBanned: true,
+    });
     return {
-      success: false,
-      statusCode: 404,
-      message: `No user was deleted with phone number ${phoneNumber}.`,
+      success: true,
+      statusCode: 200,
+      message: `User with phone number ${phoneNumber} banned successfully.`,
     };
   } catch (error: unknown) {
     return handleError(error);
@@ -68,11 +81,13 @@ export const getUsers = async (): Promise<ResponseHandler> => {
   try {
     const users = await User.findAll();
 
+    const usersDataResponse = mapUsers(users);
+
     return {
       success: true,
       statusCode: 200,
       message: 'Users fetched successfully.',
-      data: users,
+      data: usersDataResponse,
     };
   } catch (error: unknown) {
     return handleError(error);
@@ -86,11 +101,12 @@ export const getUser = async (
     const user = await User.findOne({ where: { phoneNumber } });
 
     if (user) {
+      const userDataResponse = mapUser(user);
       return {
         success: true,
         statusCode: 200,
         message: 'User fetched successfully.',
-        data: user,
+        data: userDataResponse,
       };
     }
 
@@ -120,12 +136,13 @@ export const updateUser = async (
     }
 
     const updatedUser = await user.update(userData);
+    const userDataResponse = mapUser(updatedUser);
 
     return {
       success: true,
       statusCode: 200,
       message: 'User updated successfully.',
-      data: updatedUser,
+      data: userDataResponse,
     };
   } catch (error: unknown) {
     return handleError(error);

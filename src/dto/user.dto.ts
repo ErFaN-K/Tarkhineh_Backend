@@ -1,3 +1,14 @@
+export interface GetUserResponseDTO {
+  firstName: string;
+  lastName: string;
+  email: string | null | undefined;
+  phoneNumber: string;
+  displayName: string | null | undefined;
+  birthDate: Date | null | undefined;
+  userProfile: string | null | undefined;
+  userRole: string;
+  isBanned: boolean;
+}
 export interface CreateUserDTO {
   phoneNumber: string;
   firstName: string;
@@ -13,4 +24,5 @@ export interface UpdateUserDTO {
   birthDate?: Date;
   userProfile?: string;
   userRole?: string;
+  isBanned?: boolean;
 }

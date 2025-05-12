@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   createUserHandler,
-  deleteUserHandler,
+  banUserHandler,
   getUsersHandler,
   getUserHandler,
   updateUserHandler,
@@ -28,7 +28,7 @@ router.patch(
 );
 
 // Delete User Route
-router.delete('/:phoneNumber', deleteUserHandler);
+router.delete('/:phoneNumber', banUserHandler);
 
 // Get Users
 router.get('/', getUsersHandler);

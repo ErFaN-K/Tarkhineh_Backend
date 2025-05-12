@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { CreateUserDTO, UpdateUserDTO } from '@/dto/user.dto';
 import {
   createUser,
-  deleteUser,
+  banUser,
   getUser,
   getUsers,
   updateUser,
@@ -21,12 +21,12 @@ export const createUserHandler = async (
   }
 };
 
-export const deleteUserHandler = async (
+export const banUserHandler = async (
   req: Request<{ phoneNumber: string }>,
   res: Response
 ): Promise<void> => {
   try {
-    const result = await deleteUser(req.params.phoneNumber);
+    const result = await banUser(req.params.phoneNumber);
     res.status(result.statusCode).json(result);
   } catch (error: unknown) {
     handleError(res, error);

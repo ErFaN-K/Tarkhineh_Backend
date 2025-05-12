@@ -3,7 +3,7 @@ import {
   Column,
   Model,
   DataType,
-  BeforeCreate
+  BeforeCreate,
 } from 'sequelize-typescript';
 
 @Table({
@@ -61,6 +61,13 @@ export default class User extends Model {
     defaultValue: 'user',
   })
   userRole!: 'admin' | 'user';
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  isBanned!: boolean;
 
   @BeforeCreate
   static setDisplayName(user: User) {
