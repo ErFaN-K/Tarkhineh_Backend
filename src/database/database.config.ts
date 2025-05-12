@@ -1,4 +1,5 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
+import User from '@/models/user.model';
 
 const db = new Sequelize(
   process.env.DB_NAME!,
@@ -8,6 +9,7 @@ const db = new Sequelize(
     host: process.env.DB_HOST!,
     dialect: 'mysql',
     logging: false,
+    models: [User],
   }
 );
 

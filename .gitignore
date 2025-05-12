@@ -26,3 +26,6 @@ logs/
 
 # Windows system files
 Thumbs.db
+
+# Uploads Folder
+public/uploads/*

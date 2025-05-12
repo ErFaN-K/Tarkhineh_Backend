@@ -1,4 +1,4 @@
-import db from '@/config/database.config';
+import db from '@/database/database.config';
 
 export const checkDbConnection = async (): Promise<void> => {
   try {
