@@ -65,7 +65,6 @@ export default class User extends Model {
   userRole!: string;
 
   @BeforeCreate
-  @BeforeUpdate
   static setDisplayName(user: User) {
     if (user.firstName && user.lastName) {
       user.displayName = `${user.firstName} ${user.lastName}`;

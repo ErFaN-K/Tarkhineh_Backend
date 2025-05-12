@@ -13,6 +13,4 @@ export interface UpdateUserDTO {
   birthDate?: Date;
   userProfile?: string;
   userRole?: string;
-  createAt?: Date;
-  updatedAt?: Date;
 }

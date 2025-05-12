@@ -1,42 +1,62 @@
 import path from 'path';
-import { Request } from 'express';
-import multer, { FileFilterCallback } from 'multer';
+import fs from 'fs';
+import multer, { StorageEngine, FileFilterCallback } from 'multer';
+import { Request, Response, NextFunction } from 'express';
 
-const profileStorage = multer.diskStorage({
-  destination: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: (error: Error | null, destination: string) => void
-  ): void => {
-    cb(null, './uploads/profiles');
+const uploadDir = path.join(process.cwd(), 'public/uploads/profiles');
+
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage: StorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
   },
-  filename: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: (error: Error | null, filename: string) => void
-  ): void => {
-    const uniqueName =
-      'profile-' + Date.now() + path.extname(file.originalname);
+  filename: (req, file, cb) => {
+    const uniqueName = `user-profile_${Date.now()}${path.extname(file.originalname)}`;
     cb(null, uniqueName);
   },
 });
 
-const profileFileFilter = (
+const fileFilter = (
   req: Request,
   file: Express.Multer.File,
   cb: FileFilterCallback
-): void => {
-  if (file.mimetype === 'image/png') {
+) => {
+  if (file.mimetype.startsWith('image/')) {
     cb(null, true);
-    return;
+  } else {
+    cb(new Error('Only image files are allowed!'));
   }
-  cb(null, false);
 };
 
-export const uploadProfile = multer({
-  storage: profileStorage,
-  fileFilter: profileFileFilter,
+const upload = multer({
+  storage,
   limits: {
-    fileSize: 2 * 1024 * 1024,
+    fileSize: 2 * 1024 * 1024, // 2MB
   },
-});
+  fileFilter,
+}).single('userProfile');
+
+const profileUpload = (req: Request, res: Response, next: NextFunction) => {
+  upload(req, res, (err: any) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({
+        success: false,
+        message: 'File upload error',
+        error: err.message,
+      });
+    }
+
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        message: 'File validation error',
+        error: err.message,
+      });
+    }
+
+    next();
+  });
+};
+
+export default profileUpload;

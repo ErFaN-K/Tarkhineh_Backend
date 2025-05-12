@@ -1,57 +1,75 @@
 import { Request, Response } from 'express';
-import { CreateUserDTO } from '@/dto/UserDTO';
-import { createUser, deleteUser } from '@/services/user.service';
+import { CreateUserDTO, UpdateUserDTO } from '@/dto/UserDTO';
+import {
+  createUser,
+  deleteUser,
+  getUser,
+  getUsers,
+  updateUser,
+} from '@/services/user.service';
+import handleError from '@/utils/controllerHandleError';
 
-// Create User Function
 export const createUserHandler = async (
   req: Request<{}, {}, CreateUserDTO>,
   res: Response
 ): Promise<void> => {
   try {
-    const userData = req.body;
-    const result = await createUser(userData);
-
-    if (typeof result === 'string') {
-      res.status(400).send({
-        success: false,
-        error: result,
-      });
-      return;
-    }
-
-    res.status(201).json({
-      success: true,
-      data: result,
-    });
+    const result = await createUser(req.body);
+    res.status(result.statusCode).json(result);
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(500).send(error.message);
-    } else {
-      res.status(500).send('Unknown error occurred');
-    }
+    handleError(res, error);
   }
 };
 
-// Delete User Function
 export const deleteUserHandler = async (
-  req: Request<{}, {}, {}, { phoneNumber: string }>,
+  req: Request<{ phoneNumber: string }>,
   res: Response
 ): Promise<void> => {
   try {
-    const userPhoneNumber = req.query.phoneNumber;
-    const result = await deleteUser(userPhoneNumber);
+    const result = await deleteUser(req.params.phoneNumber);
+    res.status(result.statusCode).json(result);
+  } catch (error: unknown) {
+    handleError(res, error);
+  }
+};
 
-    if (typeof result === 'string') {
-      res.status(400).json({
-        success: false,
-        error: result,
-      });
-      return;
+export const getUsersHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const result = await getUsers();
+    res.status(result.statusCode).json(result);
+  } catch (error: unknown) {
+    handleError(res, error);
+  }
+};
+
+export const getUserHandler = async (
+  req: Request<{ phoneNumber: string }>,
+  res: Response
+): Promise<void> => {
+  try {
+    const result = await getUser(req.params.phoneNumber);
+    res.status(result.statusCode).json(result);
+  } catch (error: unknown) {
+    handleError(res, error);
+  }
+};
+
+export const updateUserHandler = async (
+  req: Request<{ phoneNumber: string }, {}, UpdateUserDTO>,
+  res: Response
+): Promise<void> => {
+  try {
+    if (req.file) {
+      const fileUrl = `${req.protocol}://${req.get('host')}/uploads/profiles/${req.file.filename}`;
+      req.body.userProfile = fileUrl;
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'User Deleted Successfully',
-    });
-  } catch (error) {}
+    const result = await updateUser(req.params.phoneNumber, req.body);
+    res.status(result.statusCode).json(result);
+  } catch (error: unknown) {
+    handleError(res, error);
+  }
 };

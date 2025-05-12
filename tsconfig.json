@@ -10,11 +10,12 @@
     "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "typeRoots": ["node_modules/@types", "src/types"],
     "baseUrl": "./",
     "skipLibCheck": true,
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
   },
   "include": ["src/**/*.ts"]
 }
