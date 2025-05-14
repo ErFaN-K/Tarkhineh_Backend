@@ -1,11 +1,11 @@
-import { Response } from 'express';
+import { Response } from 'express'
 
 const handleError = (res: Response, error: unknown): void => {
-  let message = 'Internal server error';
-  let statusCode = 500;
+  let message = 'Internal server error'
+  let statusCode = 500
 
   if (error instanceof Error) {
-    message = error.message;
+    message = error.message
   }
 
   res.status(statusCode).json({
@@ -13,7 +13,7 @@ const handleError = (res: Response, error: unknown): void => {
     message,
     data: null,
     errors: error,
-  });
-};
+  })
+}
 
-export default handleError;
+export default handleError

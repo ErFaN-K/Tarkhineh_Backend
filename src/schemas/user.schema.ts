@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
 export const createUserSchema = Joi.object({
   phoneNumber: Joi.string()
@@ -18,7 +18,7 @@ export const createUserSchema = Joi.object({
   lastName: Joi.string().trim().required().messages({
     'any.required': 'Last name is required',
   }),
-});
+})
 
 export const updateUserSchema = Joi.object({
   phoneNumber: Joi.string()
@@ -66,4 +66,4 @@ export const updateUserSchema = Joi.object({
     'string.base': 'User role must be a string',
     'any.only': 'User role must be either "admin" or "user"',
   }),
-});
+})

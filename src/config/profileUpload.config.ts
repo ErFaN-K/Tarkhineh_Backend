@@ -1,33 +1,33 @@
-import path from 'path';
-import fs from 'fs';
-import multer, { StorageEngine, FileFilterCallback } from 'multer';
-import { Request, Response, NextFunction } from 'express';
+import path from 'path'
+import fs from 'fs'
+import multer, { StorageEngine, FileFilterCallback } from 'multer'
+import { Request, Response, NextFunction } from 'express'
 
-const uploadDir = path.join(process.cwd(), 'public/uploads/profiles');
+const uploadDir = path.join(process.cwd(), 'public/uploads/profiles')
 
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
 
 const storage: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    cb(null, uploadDir)
   },
   filename: (req, file, cb) => {
-    const uniqueName = `user-profile_${Date.now()}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
+    const uniqueName = `user-profile_${Date.now()}${path.extname(file.originalname)}`
+    cb(null, uniqueName)
   },
-});
+})
 
 const fileFilter = (
   req: Request,
   file: Express.Multer.File,
-  cb: FileFilterCallback
+  cb: FileFilterCallback,
 ) => {
   if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
+    cb(null, true)
   } else {
-    cb(new Error('Only image files are allowed!'));
+    cb(new Error('Only image files are allowed!'))
   }
-};
+}
 
 const upload = multer({
   storage,
@@ -35,7 +35,7 @@ const upload = multer({
     fileSize: 2 * 1024 * 1024, // 2MB
   },
   fileFilter,
-}).single('userProfile');
+}).single('userProfile')
 
 const profileUpload = (req: Request, res: Response, next: NextFunction) => {
   upload(req, res, (err: any) => {
@@ -44,7 +44,7 @@ const profileUpload = (req: Request, res: Response, next: NextFunction) => {
         success: false,
         message: 'File upload error',
         error: err.message,
-      });
+      })
     }
 
     if (err) {
@@ -52,11 +52,11 @@ const profileUpload = (req: Request, res: Response, next: NextFunction) => {
         success: false,
         message: 'File validation error',
         error: err.message,
-      });
+      })
     }
 
-    next();
-  });
-};
+    next()
+  })
+}
 
-export default profileUpload;
+export default profileUpload

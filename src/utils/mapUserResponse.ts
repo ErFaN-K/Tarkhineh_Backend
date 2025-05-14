@@ -1,5 +1,5 @@
-import User from '@/models/user.model';
-import { GetUserResponseDTO } from '@/dto/user.dto';
+import User from '@/models/user.model'
+import { GetUserResponseDTO } from '@/dto/user.dto'
 
 export const mapUser = (user: User): GetUserResponseDTO => {
   return {
@@ -12,8 +12,8 @@ export const mapUser = (user: User): GetUserResponseDTO => {
     userProfile: user.userProfile,
     userRole: user.userRole,
     isBanned: user.isBanned,
-  };
-};
+  }
+}
 
 export const mapUsers = (users: User[]): GetUserResponseDTO[] => {
   return users.map((user) => ({
@@ -26,5 +26,5 @@ export const mapUsers = (users: User[]): GetUserResponseDTO[] => {
     userProfile: user.userProfile,
     userRole: user.userRole,
     isBanned: user.isBanned,
-  }));
-};
+  }))
+}

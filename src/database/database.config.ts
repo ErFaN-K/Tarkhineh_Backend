@@ -1,5 +1,5 @@
-import { Sequelize } from 'sequelize-typescript';
-import User from '@/models/user.model';
+import { Sequelize } from 'sequelize-typescript'
+import User from '@/models/user.model'
 
 const db = new Sequelize(
   process.env.DB_NAME!,
@@ -10,7 +10,7 @@ const db = new Sequelize(
     dialect: 'mysql',
     logging: false,
     models: [User],
-  }
-);
+  },
+)
 
-export default db;
+export default db
